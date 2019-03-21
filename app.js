@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 // SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description:String
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
@@ -19,8 +20,9 @@ var Campground = mongoose.model("Campground", campgroundSchema);
 // FOR STARTER DATA
 // Campground.create({
 //         name: "Granite Hill",
-//         image:"http://src.onlinedown.net/supply/170210_logo/campsite.jpg"  
-// }, function(err, campground){
+//         image:"http://src.onlinedown.net/supply/170210_logo/campsite.jpg" ,
+//         description : "This is granite hill decription."
+//     }, function(err, campground){
 //     if(err){
 //         console.log(err);
 //     }else{
@@ -90,7 +92,7 @@ app.get("/campgrounds", function(req,res){
         if(err){
             console.log(err);
         }else{
-            res.render("campgrounds",{campgrounds : allCampgrounds});
+            res.render("index",{campgrounds : allCampgrounds});
         }
     });
 });
@@ -99,7 +101,8 @@ app.get("/campgrounds", function(req,res){
 app.post("/campgrounds", function(req, res){
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground = {name:name, image:image}
+    var desc = req.body.description;
+    var newCampground = {name:name, image:image, description : desc}
     //Create a new campground and new to database
     Campground.create(newCampground, function(err, newlyCampground){
         if(err){
@@ -114,6 +117,18 @@ app.post("/campgrounds", function(req, res){
 app.get("/campgrounds/new", function(req,res){
     res.render("new.ejs");
 });
+
+// get detailed camp
+app.get("/campgrounds/:id", function(req, res){
+    Campground.findById(req.params.id, function(err, foundCampground){
+        if(err){
+            console.log(err);
+        }else{
+            res.render("show", {campground: foundCampground});
+        }
+    });
+});
+
 app.listen(3000, function(){
     console.log("yelp camp started");
 });
