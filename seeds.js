@@ -21,6 +21,10 @@ var data = [{
 
 // CALLBACK HELL EXAMPLE, NEED REFACTOR 
 function seedDB() {
+    // remove all comment
+    Comment.remove({},function(err){
+        console.log(err);
+    });
     // remove all campgrounds
     Campground.remove({}, function (err) {
         if (err) {
