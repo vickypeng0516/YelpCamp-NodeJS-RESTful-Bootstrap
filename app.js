@@ -3,19 +3,18 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 //search database named as yelp_camp, if exist connect, if not create
-mongoose.connect("mongodb://localhost/yelp_camp");
-
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended:true}));
-
-// SCHEMA SETUP
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description:String
+mongoose.connect("mongodb://localhost/yelp_camp", {
+    useNewUrlParser: true
 });
 
-var Campground = mongoose.model("Campground", campgroundSchema);
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+var Campground = require("./models/campground");
+var seedDB = require("./seeds");
+seedDB();
 
 // FOR STARTER DATA
 // Campground.create({
@@ -82,53 +81,61 @@ var Campground = mongoose.model("Campground", campgroundSchema);
 //     {name:"mountain goat", image: "http://src.onlinedown.net/supply/170210_logo/campsite.jpg"}
 // ]
 
-app.get("/", function(req,res){
+app.get("/", function (req, res) {
     res.render("landing")
 });
 // show all camp ground
-app.get("/campgrounds", function(req,res){
+app.get("/campgrounds", function (req, res) {
     //Get all campground from DB
-    Campground.find({}, function(err, allCampgrounds){
-        if(err){
+    Campground.find({}, function (err, allCampgrounds) {
+        if (err) {
             console.log(err);
-        }else{
-            res.render("index",{campgrounds : allCampgrounds});
+        } else {
+            res.render("index", {
+                campgrounds: allCampgrounds
+            });
         }
     });
 });
 
 // add a new camp grounds
-app.post("/campgrounds", function(req, res){
+app.post("/campgrounds", function (req, res) {
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
-    var newCampground = {name:name, image:image, description : desc}
+    var newCampground = {
+        name: name,
+        image: image,
+        description: desc
+    }
     //Create a new campground and new to database
-    Campground.create(newCampground, function(err, newlyCampground){
-        if(err){
+    Campground.create(newCampground, function (err, newlyCampground) {
+        if (err) {
             console.log(err);
-        }
-        else{
+        } else {
             res.redirect("/campgrounds");
         }
     });
 });
 // show the form to display camp grounds 
-app.get("/campgrounds/new", function(req,res){
+app.get("/campgrounds/new", function (req, res) {
     res.render("new.ejs");
 });
 
 // get detailed camp
-app.get("/campgrounds/:id", function(req, res){
-    Campground.findById(req.params.id, function(err, foundCampground){
-        if(err){
+app.get("/campgrounds/:id", function (req, res) {
+    Campground.findById(req.params.id).populate("comments").exec(function (err, foundCampground) {
+        if (err) {
             console.log(err);
-        }else{
-            res.render("show", {campground: foundCampground});
+        } else {
+            console.log(foundCampground);
+            res.render("show", {
+                campground: foundCampground
+            });
         }
     });
 });
 
-app.listen(3000, function(){
+app.listen(3000, function () {
     console.log("yelp camp started");
 });
