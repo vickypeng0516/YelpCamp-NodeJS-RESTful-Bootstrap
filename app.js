@@ -2,6 +2,9 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var passport = require("passport");
+var User = require("./models/user");
+var LocalStrategy = require("passport-local");
 //search database named as yelp_camp, if exist connect, if not create
 mongoose.connect("mongodb://localhost/yelp_camp", {
     useNewUrlParser: true
@@ -84,6 +87,22 @@ seedDB();
 //     {name:"mountain goat", image: "http://src.onlinedown.net/supply/170210_logo/campsite.jpg"}
 // ]
 
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "root",
+    resave: false,
+    saveUninitialized : false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+//User.authenticate, serializeUser(), deserializeUser() is the method come from password-local-mongoose
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+// ROUTE
 app.get("/", function (req, res) {
     res.render("landing")
 });
@@ -174,7 +193,25 @@ app.post("/campgrounds/:id/comments", function(req,res){
     // connect new comment to campground
     // redirect
 });
+// Auth route
+// go to register page
+app.get("/register", function(req,res){
+    res.render("register");
+});
 
+// handle register form
+app.post("/register", function(req,res){
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("register"); 
+        }
+        passport.authenticate("local")(req,res, function(){
+            res.redirect("/campgrounds");
+        });
+    });
+});
 app.listen(3000, function () {
     console.log("yelp camp started");
 });
