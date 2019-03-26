@@ -101,20 +101,27 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// to make var available in entire routes
+app.use(function(req,res,next){
+    res.locals.currentUser = req.user;
+    next();
+});
 
 // ROUTE
 app.get("/", function (req, res) {
-    res.render("landing")
+    res.render("landing");
 });
 // show all camp ground
 app.get("/campgrounds", function (req, res) {
+    console.log(req.user);
     //Get all campground from DB
     Campground.find({}, function (err, allCampgrounds) {
         if (err) {
             console.log(err);
         } else {
             res.render("campgrounds/index", {
-                campgrounds: allCampgrounds
+                campgrounds: allCampgrounds,
+                currentUser : req.user
             });
         }
     });
@@ -159,7 +166,7 @@ app.get("/campgrounds/:id", function (req, res) {
     });
 });
 // lead to add comment form
-app.get("/campgrounds/:id/comments/new", function(req,res){
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(req,res){
     Campground.findById(req.params.id, function(err, foundCampground){
         if(err){
             console.log(err);
@@ -170,7 +177,8 @@ app.get("/campgrounds/:id/comments/new", function(req,res){
 });
 
 // post new comment
-app.post("/campgrounds/:id/comments", function(req,res){
+// protect post request using isLoggedIn middleware
+app.post("/campgrounds/:id/comments", isLoggedIn, function(req,res){
     // look up campground using id
     Campground.findById(req.params.id, function(err, campground){
         if(err){
@@ -212,6 +220,35 @@ app.post("/register", function(req,res){
         });
     });
 });
+
+// show login form
+app.get("/login", function(req,res){
+    res.render("login");
+})
+
+// handle login logic
+// passport.authenticate is the middleware
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect:"/campgrounds",
+        failureRedirect:"/login"
+    }), function(req,res){
+});
+
+// Add logout is provided in passport js
+// METHOD .logout()
+app.get("/logout", function(req,res){
+    req.logout();
+    res.redirect("/campgrounds");
+}); 
+
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
+
 app.listen(3000, function () {
     console.log("yelp camp started");
 });
