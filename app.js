@@ -9,6 +9,8 @@ var commentRoutes = require("./routes/comments");
 var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index.js");
 var methodOverride = require("method-override");
+var flash = require("connect-flash");
+
 //search database named as yelp_camp, if exist connect, if not create
 mongoose.connect("mongodb://localhost/yelp_camp", {
     useNewUrlParser: true
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 
 
 var Campground = require("./models/campground");
@@ -110,6 +113,8 @@ passport.deserializeUser(User.deserializeUser());
 // to call use currentUser.attr in ejs
 app.use(function(req,res,next){
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
 

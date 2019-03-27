@@ -95,6 +95,8 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
+    //.flash(key, message);
+    req.flash("error","Please Login First!");
     res.redirect("/login");
 }
 
