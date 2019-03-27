@@ -107,6 +107,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // to make var available in entire routes
+// to call use currentUser.attr in ejs
 app.use(function(req,res,next){
     res.locals.currentUser = req.user;
     next();
