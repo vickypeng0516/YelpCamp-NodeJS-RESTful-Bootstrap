@@ -1,7 +1,12 @@
 <% include ./partials/header %>
-<form action="/login" method="POST">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
-    <input type="Submit" value="Login!">
-</form>
+<div class="text-center">
+    <form class="form-signin" action="/login" method="POST">
+        <h1 id="sign-in-title"class="h3 mb-3 font-weight-normal"> Please Login</h1>
+        <label for="inputUsername" class="sr-only">UserName</label>
+        <input class="form-control" type="text" name="username" placeholder="username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input class="form-control" type="password" name="password" placeholder="password" required autofocus>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    </form>
+</div>
 <% include ./partials/footer %>

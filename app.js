@@ -24,7 +24,7 @@ app.use(express.static(__dirname + "/public"));
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var seedDB = require("./seeds");
-seedDB();
+// seedDB();
 
 // FOR STARTER DATA
 // Campground.create({
