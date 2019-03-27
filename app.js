@@ -8,7 +8,7 @@ var LocalStrategy = require("passport-local");
 var commentRoutes = require("./routes/comments");
 var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index.js");
-
+var methodOverride = require("method-override");
 //search database named as yelp_camp, if exist connect, if not create
 mongoose.connect("mongodb://localhost/yelp_camp", {
     useNewUrlParser: true
@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 
 
 var Campground = require("./models/campground");

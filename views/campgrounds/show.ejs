@@ -17,6 +17,13 @@
                     <h4 class="pull-right">$9.00/night</h4>
                     <h4><a><%= campground.name %></a></h4>
                     <p><%= campground.description %></p>
+                    <p>
+                        <i>Submited By : <%= campground.author.username %></i>
+                    </p>
+                    <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                     <form id="delete" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
             <div class="well">
