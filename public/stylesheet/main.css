@@ -16,6 +16,9 @@
     height:auto;
     margin-bottom : 20px;
 }
+.btn-info{
+    float:right;
+}
 
 #sign-in-title{
     margin-top:100px;
@@ -105,4 +108,8 @@
 
 .no-cssanimations .slideshow li {
     opacity: 1;
+}
+
+#search-form{
+    display: inline;
 }

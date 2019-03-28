@@ -16,18 +16,64 @@ router.get("/campgrounds", function (req, res) {
         }
     });
 });
+// search campground
+router.post("/campgrounds/search", function (req, res) {
+    var name = req.body.name;
+    var loc = req.body.location;
+    console.log(loc);
+    if (!loc) {
+        Campground.find({ 'name': name }, function (err, foundCampgrounds) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/index", {
+                    campgrounds: foundCampgrounds,
+                    currentUser: req.user
+                });
+            }
+        });
+    } 
+    else if(!name) {
+        Campground.find({ 'location': loc }, function (err, foundCampgrounds) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/index", {
+                    campgrounds: foundCampgrounds,
+                    currentUser: req.user
+                });
+            }
+        });
+    }
+    else{
+        Campground.find({ 'location': loc , 'name': name }, function (err, foundCampgrounds) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/index", {
+                    campgrounds: foundCampgrounds,
+                    currentUser: req.user
+                });
+            }
+        });
+    }
+});
 
 // add a new camp grounds
 router.post("/campgrounds", isLoggedIn, function (req, res) {
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
+    var loc = req.body.location;
+    var price = req.body.price;
     var user_id = req.user._id;
     var username = req.user.username;
     var newCampground = {
         name: name,
         image: image,
         description: desc,
+        location: loc,
+        price: price,
         author: {
             id: user_id,
             username: username
@@ -63,8 +109,8 @@ router.get("/campgrounds/:id", function (req, res) {
 
 // Edit Campground route
 router.get("/campgrounds/:id/edit", checkCampgroundOwnership, function (req, res) {
-    Campground.findById(req.params.id, function(err, foundCampground){
-        res.render("campgrounds/edit", {campground: foundCampground});
+    Campground.findById(req.params.id, function (err, foundCampground) {
+        res.render("campgrounds/edit", { campground: foundCampground });
     });
 });
 
@@ -96,7 +142,7 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     //.flash(key, message);
-    req.flash("error","Please Login First!");
+    req.flash("error", "Please Login First!");
     res.redirect("/login");
 }
 
