@@ -6,6 +6,8 @@ var campgroundSchema = new mongoose.Schema({
     image: String,
     description:String,
     location: String,
+    lat: Number,
+    lng: Number,
     price: String,
     // ARRAY, to add and associate, use .push()
     comments: [
