@@ -9,7 +9,7 @@ A web application built following The Web Developer Bootcamp course.
   ###### - Other: Google Map API
   
   ## Build
-  Run npm install for all dependencies
+  Run `npm install` for all dependencies
   
   ## How to run
-  Run node server.js. Visit port localhost:3000
+  Run `node server.js`. Visit port localhost:3000
