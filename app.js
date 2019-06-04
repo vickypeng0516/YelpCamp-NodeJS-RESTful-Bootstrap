@@ -13,10 +13,11 @@ var methodOverride = require("method-override");
 var flash = require("connect-flash");
 
 //search database named as yelp_camp, if exist connect, if not create
-mongoose.connect("mongodb://localhost/yelp_camp", {
+
+mongoose.connect('mongodb+srv://root:root@cluster0-cd5zp.mongodb.net/test?retryWrites=true', {
     useNewUrlParser: true
 });
-
+//mongodb://localhost/yelp_camp
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
