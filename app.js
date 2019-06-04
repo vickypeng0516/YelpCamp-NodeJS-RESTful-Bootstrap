@@ -15,7 +15,12 @@ var flash = require("connect-flash");
 //search database named as yelp_camp, if exist connect, if not create
 
 mongoose.connect('mongodb+srv://root:root@cluster0-cd5zp.mongodb.net/test?retryWrites=true', {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true
+}).then(() =>{
+    console.log('Connected to db');
+}).catch(err =>{
+    console.log('Error', err.message);
 });
 //mongodb://localhost/yelp_camp
 app.set("view engine", "ejs");
