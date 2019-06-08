@@ -22,6 +22,8 @@ mongoose.connect('mongodb+srv://root:root@cluster0-cd5zp.mongodb.net/test?retryW
 }).catch(err =>{
     console.log('Error', err.message);
 });
+
+
 //mongodb://localhost/yelp_camp
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
