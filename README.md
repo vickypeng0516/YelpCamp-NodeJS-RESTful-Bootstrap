@@ -11,5 +11,8 @@ A web application built following The Web Developer Bootcamp course.
   ## Build
   Run `npm install` for all dependencies
   
-  ## How to run
-  Run `node server.js`. Visit port localhost:3000
+  ## Run
+  Run `npm start` to start
+  
+  ## Demo
+  Deployed through heroku. Visit https://mysterious-bastion-94239.herokuapp.com/
