@@ -14,6 +14,7 @@ var geocoder = NodeGeocoder(options);
 // show all camp ground
 router.get("/campgrounds", function (req, res) {
     //Get all campground from DB
+    console.log("Show All Campground");
     Campground.find({}, function (err, allCampgrounds) {
         if (err) {
             console.log(err);
@@ -75,6 +76,7 @@ router.post("/campgrounds/search", function (req, res) {
 
 // add a new camp grounds
 router.post("/campgrounds", isLoggedIn, function (req, res) {
+    console.log("add new camp grounds");
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
