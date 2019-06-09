@@ -45,8 +45,9 @@ router.post("/campgrounds/search", function (req, res) {
             }
         });
     } else if (!name) {
+        //  Todo: need fuzz search for location 
         Campground.find({
-            'location': loc
+            'location': {"$regex" : loc, "$options": "i"}
         }, function (err, foundCampgrounds) {
             if (err) {
                 console.log(err);
