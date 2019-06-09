@@ -33,7 +33,7 @@ router.post("/campgrounds/search", function (req, res) {
     console.log(loc);
     if (!loc) {
         Campground.find({
-            'name': name
+            'name': {"$regex" : name, "$options" : "i"}
         }, function (err, foundCampgrounds) {
             if (err) {
                 console.log(err);
@@ -60,8 +60,8 @@ router.post("/campgrounds/search", function (req, res) {
         });
     } else {
         Campground.find({
-            'location': loc,
-            'name': name
+            'location': {"$regex" : loc, "$options" : "i"},
+            'name': {"$regex" : loc, "$option" : "i"}
         }, function (err, foundCampgrounds) {
             if (err) {
                 console.log(err);
