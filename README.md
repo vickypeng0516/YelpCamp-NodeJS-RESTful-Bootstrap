@@ -13,6 +13,12 @@ A web application built following The Web Developer Bootcamp course.
   
   ## Run
   Run `npm start` to start
-  
+  ## Features
+  - Registration & Login as amdin or general user
+  - User post/delete/manage his/her campground info
+  - User post/delete/manage his/her comments
+  - Search campground by location/name or location & name
+  - Google map display location
+
   ## Demo
   Deployed through heroku. Visit https://mysterious-bastion-94239.herokuapp.com/
